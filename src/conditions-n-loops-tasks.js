@@ -70,10 +70,13 @@ function getMaxNumber(a, b, c) {
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  */
 function canQueenCaptureKing(queen, king) {
-  if (queen.x === king.x || queen.y === king.x) {
+  if (queen.x === king.x || queen.y === king.y) {
     return true;
   }
   if (queen.x === queen.y && king.x === king.y) {
+    return true;
+  }
+  if (queen.x + queen.y === king.x + king.y) {
     return true;
   }
   return false;
@@ -132,8 +135,29 @@ function isIsoscelesTriangle(a, b, c) {
  *  10  => X
  *  26  => XXVI
  */
-function convertToRomanNumerals(/* num */) {
-  throw new Error('Not implemented');
+function convertToRomanNumerals(num) {
+  const tens = (num - (num % 10)) / 10;
+  let ten = '';
+  for (let i = 1; i <= tens; i += 1) {
+    ten += 'X';
+  }
+  const dec = num % 10;
+  const five = dec > 4 && dec < 9 ? 'V' : '';
+  const four = dec >= 4 && num % 10 < 5 ? 'IV' : '';
+  let lessthree = '';
+  if (dec <= 3) {
+    for (let i = 1; i <= dec; i += 1) {
+      lessthree += 'I';
+    }
+  }
+  let sixeght = '';
+  if (dec > 5 && dec <= 8) {
+    for (let i = 5; i < dec; i += 1) {
+      sixeght += 'I';
+    }
+  }
+  const nine = dec === 9 ? 'IX' : '';
+  return `${ten + nine + lessthree + four + five + sixeght}`;
 }
 
 /**
@@ -167,8 +191,27 @@ function convertNumberToString(/* numberStr */) {
  *  '0123210'   => true
  *  'qweqwe'    => false
  */
-function isPalindrome(/* str */) {
-  throw new Error('Not implemented');
+function isPalindrome(str) {
+  let j = str.length;
+  if (str.length % 2 === 0) {
+    for (let i = 0; i < str.length / 2; i += 1) {
+      if (str[i] === str[j - 1]) {
+        j += -1;
+      } else {
+        return false;
+      }
+    }
+  }
+  if (str.length % 2 !== 0) {
+    for (let i = 0; i < (str.length - 1) / 2; i += 1) {
+      if (str[i] === str[j - 1]) {
+        j += -1;
+      } else {
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
 /**
