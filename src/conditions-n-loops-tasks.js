@@ -538,7 +538,7 @@ function shuffleChar(str, iterations) {
     let cycleLength = 1;
     let currentStr = stri;
 
-    while (true) {
+    while (cycleLength < strLength * strLength) {
       let nextStr = '';
       for (let i = 0; i < strLength; i += 2) {
         nextStr += currentStr[i];
