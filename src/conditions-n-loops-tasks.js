@@ -519,21 +519,58 @@ function sortByAsc(arr) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
+
 function shuffleChar(str, iterations) {
-  let resultstr = str;
-  for (let i = 0; i < iterations; i += 1) {
-    let odd = '';
-    let even = '';
-    for (let j = 0; j < resultstr.length; j += 1) {
-      if (j % 2 === 0 && j >= 0) {
-        even += resultstr[j];
-      } else {
-        odd += resultstr[j];
-      }
-    }
-    resultstr = even + odd;
+  if (!str || iterations <= 0) {
+    return str;
   }
-  return resultstr;
+
+  const n = str.length;
+  if (n === 0) {
+    return str;
+  }
+
+  const calculateCycleLength = (strLength, stri) => {
+    if (strLength <= 1) {
+      return 1;
+    }
+    const originalStr = stri;
+    let cycleLength = 1;
+    let currentStr = stri;
+
+    while (true) {
+      let nextStr = '';
+      for (let i = 0; i < strLength; i += 2) {
+        nextStr += currentStr[i];
+      }
+      for (let i = 1; i < strLength; i += 2) {
+        nextStr += currentStr[i];
+      }
+
+      if (nextStr === originalStr) {
+        break;
+      }
+      currentStr = nextStr;
+      cycleLength += 1;
+    }
+    return cycleLength;
+  };
+
+  const cycleLength = calculateCycleLength(n, str);
+  const effectiveIterations = iterations % cycleLength;
+
+  let result = str;
+  for (let iteration = 0; iteration < effectiveIterations; iteration += 1) {
+    let nextStr = '';
+    for (let i = 0; i < n; i += 2) {
+      nextStr += result[i];
+    }
+    for (let i = 1; i < n; i += 2) {
+      nextStr += result[i];
+    }
+    result = nextStr;
+  }
+  return result;
 }
 
 /**
