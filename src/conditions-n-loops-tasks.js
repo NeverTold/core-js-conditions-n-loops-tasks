@@ -455,18 +455,51 @@ function rotateMatrix(matrix) {
  */
 function sortByAsc(arr) {
   const result = arr;
-  let buffer = 0;
-
-  for (let i = 0; i < arr.length; i += 1) {
-    for (let j = i + 1; j < arr.length; j += 1) {
-      if (result[i] > result[j]) {
-        buffer = result[i];
-        result[i] = result[j];
-        result[j] = buffer;
+  function insertionSort(subArr, left, right) {
+    const subArrTmp = subArr;
+    for (let i = left + 1; i <= right; i += 1) {
+      const key = subArrTmp[i];
+      let j = i - 1;
+      while (j >= left && subArrTmp[j] > key) {
+        subArrTmp[j + 1] = subArrTmp[j];
+        j -= 1;
       }
+      subArrTmp[j + 1] = key;
     }
   }
-  return result;
+
+  function partition(low, high) {
+    const mid = Math.floor((low + high) / 2);
+    const pivot = result[mid];
+    let i = low;
+    let j = high;
+
+    while (i <= j) {
+      while (result[i] < pivot) i += 1;
+      while (result[j] > pivot) j -= 1;
+      if (i <= j) {
+        [result[i], result[j]] = [result[j], result[i]];
+        i += 1;
+        j -= 1;
+      }
+    }
+    return i;
+  }
+
+  function quickSort(low, high) {
+    if (high - low <= 10) {
+      insertionSort(arr, low, high);
+      return;
+    }
+    if (low < high) {
+      const pi = partition(low, high);
+      quickSort(low, pi - 1);
+      quickSort(pi, high);
+    }
+  }
+
+  quickSort(0, arr.length - 1);
+  return arr;
 }
 
 /**
@@ -486,8 +519,21 @@ function sortByAsc(arr) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  let resultstr = str;
+  for (let i = 0; i < iterations; i += 1) {
+    let odd = '';
+    let even = '';
+    for (let j = 0; j < resultstr.length; j += 1) {
+      if (j % 2 === 0 && j >= 0) {
+        even += resultstr[j];
+      } else {
+        odd += resultstr[j];
+      }
+    }
+    resultstr = even + odd;
+  }
+  return resultstr;
 }
 
 /**
